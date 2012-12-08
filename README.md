@@ -15,7 +15,7 @@ Basic usage:
  - `fixMinHeight`: defaults to `true`. Set to `false` if you don't want the box to stop shrinking when it hits its initial size.
  - `cloneClass`: defaults to `'autogrowclone'`. Helper CSS class for the clone used for measuring sizes. Use this if you need to apply special rules for a textbox that is right next to the one you're autogrowing, but not exactly it so that they are identical.
 
- Example: 
+Example: 
 
     var opts = {
         context: $('li')
