@@ -17,7 +17,11 @@
             elem = $(elem);
             elem.data('autogrow-start-height', elem.height()); //set min height
         });
-        opts.context.on('keyup', selector, function(e){
+        opts.context
+            .on('keyup paste', selector, resize)
+        ;
+
+        function resize (e){
             var box = $(this)
                 , oldHeight = box.height()
                 , newHeight = this.scrollHeight
@@ -54,6 +58,6 @@
                     box.height(minHeight);
                 }
             } 
-        });
+        }
     }
 })(jQuery);
