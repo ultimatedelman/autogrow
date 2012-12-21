@@ -13,9 +13,31 @@
         ;
         opts = $.isPlainObject(opts) ? opts : {context: opts ? opts : $(document)};
         opts = $.extend({}, defaults, opts);
-        opts.fixMinHeight && that.each(function(i, elem){
+        that.each(function(i, elem){
+            var min, clone;
             elem = $(elem);
-            elem.data('autogrow-start-height', elem.height()); //set min height
+            //if the element is "invisible", we get an incorrect height value
+            //to get correct value, clone and append to the body. 
+            if (elem.is(':visible') || parseInt(elem.css('height'), 10) > 0) {
+                min = parseInt(elem.css('height'), 10) || elem.innerHeight();
+            } else {
+                clone = elem.clone()
+                    .addClass(opts.cloneClass)
+                    .val(elem.val())
+                    .css({
+                        position: 'absolute'
+                        , visibility: 'hidden'
+                        , display: 'block'
+                    })
+                ;
+                $('body').append(clone);
+                min = clone.innerHeight();
+                clone.remove();
+            }
+            if (opts.fixMinHeight) {
+                elem.data('autogrow-start-height', min); //set min height                                
+            }
+            elem.css('height', min);
         });
         opts.context
             .on('keyup paste', selector, resize)
@@ -23,19 +45,19 @@
 
         function resize (e){
             var box = $(this)
-                , oldHeight = box.height()
+                , oldHeight = box.innerHeight()
                 , newHeight = this.scrollHeight
                 , minHeight = box.data('autogrow-start-height') || 0
                 , clone
             ;
             if (oldHeight < newHeight) { //user is typing
-                box.scrollTop(0); //try to reduce the top of the content hiding for a second
-                opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.height(newHeight);
-            } else if (e.which == 8 || e.which == 46) { //user is deleting
+                this.scrollTop = 0; //try to reduce the top of the content hiding for a second
+                opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
+            } else if (e.which == 8 || e.which == 46) { //user is deleting                
                 if (oldHeight > minHeight) { //shrink!
                     //this cloning part is not particularly necessary. however, it helps with animation
                     //since the only way to cleanly calculate where to shrink the box to is to incrementally
-                    //reduce the height of the box until the $.height() and the scrollHeight differ.
+                    //reduce the height of the box until the $.innerHeight() and the scrollHeight differ.
                     //doing this on an exact clone to figure out the height first and then applying it to the
                     //actual box makes it look cleaner to the user
                     clone = box.clone()
@@ -46,16 +68,16 @@
                     box.after(clone); //append as close to the box as possible for best CSS matching for clone
                     do { //reduce height until they don't match
                         newHeight = clone[0].scrollHeight - 1;
-                        clone.height(newHeight);
+                        clone.innerHeight(newHeight);
                     } while (newHeight === clone[0].scrollHeight);
                     newHeight++; //adding one back eliminates a wiggle on deletion 
                     clone.remove();
                     //if user selects all and deletes or holds down delete til beginning
                     //user could get here and shrink whole box
                     newHeight < minHeight && (newHeight = minHeight);
-                    oldHeight > newHeight && opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.height(newHeight);
+                    oldHeight > newHeight && opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
                 } else { //just set to the minHeight
-                    box.height(minHeight);
+                    box.innerHeight(minHeight);
                 }
             } 
         }
