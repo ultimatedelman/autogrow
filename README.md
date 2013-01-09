@@ -5,7 +5,7 @@ autogrow.js
 
 Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 
-    $('texarea').autogrow(); //or some selector that will grab textareas
+    $('textarea').autogrow(); //or some selector that will grab textareas
 
 **autogrow.js** has some options that you can set:
 
