@@ -1,0 +1,23 @@
+{
+    "name": "autogrow"
+    , "version": 1.0
+    , "title": "autogrow.js"
+    , "author": {
+        "name": "Jason Edelman"
+        , "url": "http://jasonedelman.com"
+    }
+    , "licenses": [
+        {
+            "type": "MIT"
+            , "url": "http://opensource.org/licenses/MIT"
+        }
+    ]
+    , "dependencies": {
+        "jquery": ">=1.7"
+    }
+    , "description": "Automatically grow and shrink textareas with the content as you type."
+    , "keywords": ["textarea", "grow", "shrink", "resize"]
+    , "homepage": "https://github.com/ultimatedelman/autogrow"
+    , "docs": "https://github.com/ultimatedelman/autogrow"
+    , "demo": "http://jsfiddle.net/edelman/HrnHb/"
+}
