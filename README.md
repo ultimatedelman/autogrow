@@ -1,7 +1,7 @@
 autogrow.js
 ===========
 
-**autogrow.js** is a jQuery plugin that, like most plug-ins, was built out of frustration for lack of support for a much-needed feature, namely the ability for a `textarea` to automatically grow and shrink dynamically with its content. I received a head-start from [this post](http://stackoverflow.com/a/10080841/7173), but decided I needed more functionality. It handles the `paste` event now, as well.
+**autogrow.js** is a jQuery plugin that, like most plug-ins, was built out of frustration for lack of support for a much-needed feature, namely the ability for a `textarea` to automatically grow and shrink dynamically with its content. I received a head-start from [this post](http://stackoverflow.com/a/10080841/7173), but decided I needed more functionality. It handles the `paste` event and 'ctrl+x', or cutting.
 
 Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 

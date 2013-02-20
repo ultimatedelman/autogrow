@@ -53,7 +53,7 @@
             if (oldHeight < newHeight) { //user is typing
                 this.scrollTop = 0; //try to reduce the top of the content hiding for a second
                 opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
-            } else if (e.which == 8 || e.which == 46) { //user is deleting                
+            } else if (e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88)) { //user is deleting, backspacing, or cutting
                 if (oldHeight > minHeight) { //shrink!
                     //this cloning part is not particularly necessary. however, it helps with animation
                     //since the only way to cleanly calculate where to shrink the box to is to incrementally
