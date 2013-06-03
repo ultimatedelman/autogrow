@@ -9,6 +9,7 @@
                 , speed: 200 //speed of animation
                 , fixMinHeight: true //if you don't want the box to shrink below its initial size
                 , cloneClass: 'autogrowclone' //helper CSS class for clone if you need to add special rules
+                , onInitialize: false //resizes the textareas when the plugin is initialized
             }
         ;
         opts = $.isPlainObject(opts) ? opts : {context: opts ? opts : $(document)};
@@ -38,6 +39,10 @@
                 elem.data('autogrow-start-height', min); //set min height                                
             }
             elem.css('height', min);
+            
+            if (opts.onInitialize) {
+                resize.call(elem);
+            }
         });
         opts.context
             .on('keyup paste', selector, resize)
@@ -53,7 +58,7 @@
             if (oldHeight < newHeight) { //user is typing
                 this.scrollTop = 0; //try to reduce the top of the content hiding for a second
                 opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
-            } else if (e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88)) { //user is deleting, backspacing, or cutting
+            } else if (!e || e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88)) { //user is deleting, backspacing, or cutting
                 if (oldHeight > minHeight) { //shrink!
                     //this cloning part is not particularly necessary. however, it helps with animation
                     //since the only way to cleanly calculate where to shrink the box to is to incrementally
