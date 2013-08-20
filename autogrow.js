@@ -86,5 +86,6 @@
                 }
             } 
         }
+        return $(this);
     }
 })(jQuery);
