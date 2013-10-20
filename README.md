@@ -26,3 +26,15 @@ Example:
         , cloneClass: 'faketextarea'
     };
     $('.mytextareas').autogrow(opts);
+
+### Events
+
+`autogrow:grow` and `autogrow:shrink` events will fire when a grow or shrink animation completes (or immediately if there are no animations). You can get the textarea this applies to by looking at the `event.target`
+
+The event will be raised against the `context` you pass into the options.
+
+Example
+    $('#context-element').on('autogrow:grow', function(e) {
+      var box = $(e.target);
+      console.log(box.height());
+    });
