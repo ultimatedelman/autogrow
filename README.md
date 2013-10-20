@@ -7,7 +7,9 @@ autogrow.js
 
 Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 
-    $('textarea').autogrow(); //or some selector that will grab textareas
+```javascript
+$('textarea').autogrow(); //or some selector that will grab textareas
+```
 
 **autogrow.js** has some options that you can set:
 
@@ -20,12 +22,14 @@ Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 
 Example: 
 
-    var opts = {
-        context: $('li')
-        , animate: false
-        , cloneClass: 'faketextarea'
-    };
-    $('.mytextareas').autogrow(opts);
+```javascript
+var opts = {
+    context: $('li')
+    , animate: false
+    , cloneClass: 'faketextarea'
+};
+$('.mytextareas').autogrow(opts);
+```
 
 ### Events
 
@@ -33,8 +37,11 @@ Example:
 
 The event will be raised against the `context` you pass into the options.
 
-Example
-    $('#context-element').on('autogrow:grow', function(e) {
-      var box = $(e.target);
-      console.log(box.height());
-    });
+Example:
+
+```javascript
+$('#context-element').on('autogrow:grow', function(e) {
+  var box = $(e.target);
+  console.log(box.height());
+});
+```
