@@ -1,4 +1,4 @@
-;(function($){    
+;(function($){
     //pass in just the context as a $(obj) or a settings JS object
     $.fn.autogrow = function(opts) {
         var that = $(this).css({overflow: 'hidden', resize: 'none'}) //prevent scrollies
@@ -10,6 +10,7 @@
                 , fixMinHeight: true //if you don't want the box to shrink below its initial size
                 , cloneClass: 'autogrowclone' //helper CSS class for clone if you need to add special rules
                 , onInitialize: false //resizes the textareas when the plugin is initialized
+                , onHeightChange: function(){}
             }
         ;
         opts = $.isPlainObject(opts) ? opts : {context: opts ? opts : $(document)};
@@ -18,7 +19,7 @@
             var min, clone;
             elem = $(elem);
             //if the element is "invisible", we get an incorrect height value
-            //to get correct value, clone and append to the body. 
+            //to get correct value, clone and append to the body.
             if (elem.is(':visible') || parseInt(elem.css('height'), 10) > 0) {
                 min = parseInt(elem.css('height'), 10) || elem.innerHeight();
             } else {
@@ -36,10 +37,10 @@
                 clone.remove();
             }
             if (opts.fixMinHeight) {
-                elem.data('autogrow-start-height', min); //set min height                                
+                elem.data('autogrow-start-height', min); //set min height
             }
             elem.css('height', min);
-            
+
             if (opts.onInitialize) {
                 resize.call(elem);
             }
@@ -75,10 +76,10 @@
                         newHeight = clone[0].scrollHeight - 1;
                         clone.innerHeight(newHeight);
                     } while (newHeight === clone[0].scrollHeight);
-                    newHeight++; //adding one back eliminates a wiggle on deletion 
+                    newHeight++; //adding one back eliminates a wiggle on deletion
                     clone.remove();
                     box.focus(); // Fix issue with Chrome losing focus from the textarea.
-                    
+
                     //if user selects all and deletes or holds down delete til beginning
                     //user could get here and shrink whole box
                     newHeight < minHeight && (newHeight = minHeight);
@@ -86,7 +87,9 @@
                 } else { //just set to the minHeight
                     box.innerHeight(minHeight);
                 }
-            } 
+            }
+
+            opts.onHeightChange();
         }
     }
 })(jQuery);
