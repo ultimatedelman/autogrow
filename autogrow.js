@@ -88,5 +88,6 @@
                 }
             } 
         }
+        return that;
     }
 })(jQuery);
