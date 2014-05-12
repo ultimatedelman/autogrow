@@ -51,7 +51,7 @@
         function resize (e){
             var box = $(this)
                 , oldHeight = box.innerHeight()
-                , newHeight = this.scrollHeight
+                , newHeight = this.prop('scrollHeight')
                 , minHeight = box.data('autogrow-start-height') || 0
                 , clone
             ;
@@ -72,9 +72,9 @@
                     ;
                     box.after(clone); //append as close to the box as possible for best CSS matching for clone
                     do { //reduce height until they don't match
-                        newHeight = clone[0].scrollHeight - 1;
+                        newHeight = clone[0].prop('scrollHeight') - 1;
                         clone.innerHeight(newHeight);
-                    } while (newHeight === clone[0].scrollHeight);
+                    } while (newHeight === clone[0].prop('scrollHeight'));
                     newHeight++; //adding one back eliminates a wiggle on deletion 
                     clone.remove();
                     box.focus(); // Fix issue with Chrome losing focus from the textarea.
