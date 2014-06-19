@@ -47,7 +47,7 @@
         opts.context
             .on('keyup paste', selector, resize)
         ;
-
+    
         function resize (e){
             var box = $(this)
                 , oldHeight = box.innerHeight()
@@ -66,9 +66,12 @@
                     //doing this on an exact clone to figure out the height first and then applying it to the
                     //actual box makes it look cleaner to the user
                     clone = box.clone()
-                        .addClass(opts.cloneClass) //add clone class for extra css rules
-                        .css({position: 'absolute', zIndex:-10}) //make "invisible"
-                        .val(box.val()) //populate with content for consistent measuring
+                        //add clone class for extra css rules
+                        .addClass(opts.cloneClass)
+                        //make "invisible", remove height restriction potentially imposed by existing CSS
+                        .css({position: 'absolute', zIndex:-10, height: ''}) 
+                        //populate with content for consistent measuring
+                        .val(box.val()) 
                     ;
                     box.after(clone); //append as close to the box as possible for best CSS matching for clone
                     do { //reduce height until they don't match
