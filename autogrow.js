@@ -40,8 +40,8 @@
             }
             elem.css('height', min);
             
-            if (opts.onInitialize) {
-                resize.call(elem);
+            if (opts.onInitialize && elem.length) {
+                resize.call(elem[0]);
             }
         });
         opts.context
