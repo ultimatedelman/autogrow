@@ -2,7 +2,7 @@
   "name": "autogrow",
   "description": "Automatically grow and shrink textareas with the content as you type.",
   "version": "1.0.4",
-  "main": "autogrow.js",
+  "main": "./autogrow.js",
   "author": {
       "name": "Jason Edelman",
       "url": "http://jasonedelman.com"
