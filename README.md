@@ -17,6 +17,7 @@ Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
  - `fixMinHeight`: defaults to `true`. Set to `false` if you don't want the box to stop shrinking when it hits its initial size.
  - `cloneClass`: defaults to `'autogrowclone'`. Helper CSS class for the clone used for measuring sizes. Use this if you need to apply special rules for a textbox that is right next to the one you're autogrowing, but not exactly it so that they are identical.
  - `onInitialize`: defaults to `false`. Will trigger autogrow on init.
+ - `onResize`: defaults to `false`. Callback function, will be executed after the resize, will be passed the `event` object and the textarea object as parameters. On init, the event is undefined. If animation is enabled, it is executed after the animation completes.
 
 Example: 
 
@@ -24,5 +25,8 @@ Example:
         context: $('li')
         , animate: false
         , cloneClass: 'faketextarea'
+        , onResize: function(event, textarea) {
+			'your stuff...';
+		}
     };
     $('.mytextareas').autogrow(opts);
