@@ -7,7 +7,9 @@ autogrow.js
 
 Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 
-    $('textarea').autogrow(); //or some selector that will grab textareas
+```javascript
+$('textarea').autogrow(); //or some selector that will grab textareas
+```
 
 **autogrow.js** has some options that you can set:
 
@@ -20,9 +22,26 @@ Basic usage ([Interactive Demo](http://jsfiddle.net/edelman/HrnHb/)):
 
 Example: 
 
-    var opts = {
-        context: $('li')
-        , animate: false
-        , cloneClass: 'faketextarea'
-    };
-    $('.mytextareas').autogrow(opts);
+```javascript
+var opts = {
+    context: $('li')
+    , animate: false
+    , cloneClass: 'faketextarea'
+};
+$('.mytextareas').autogrow(opts);
+```
+
+### Events
+
+`autogrow:grow` and `autogrow:shrink` events will fire when a grow or shrink animation completes (or immediately if there are no animations). You can get the textarea this applies to by looking at the `event.target`
+
+The event will be raised against the `context` you pass into the options.
+
+Example:
+
+```javascript
+$('#context-element').on('autogrow:grow', function(e) {
+  var box = $(e.target);
+  console.log(box.height());
+});
+```

@@ -57,7 +57,13 @@
             ;
             if (oldHeight < newHeight) { //user is typing
                 this.scrollTop = 0; //try to reduce the top of the content hiding for a second
-                opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
+                if(opts.animate) {
+                    box.stop().animate({height: newHeight}, {duration: opts.speed, complete: notifyGrown});
+                } else {
+                    box.innerHeight(newHeight);
+                    notifyGrown();
+                }
+                
             } else if (!e || e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88)) { //user is deleting, backspacing, or cutting
                 if (oldHeight > minHeight) { //shrink!
                     //this cloning part is not particularly necessary. however, it helps with animation
@@ -85,12 +91,31 @@
                     //if user selects all and deletes or holds down delete til beginning
                     //user could get here and shrink whole box
                     newHeight < minHeight && (newHeight = minHeight);
-                    oldHeight > newHeight && opts.animate ? box.stop().animate({height: newHeight}, opts.speed) : box.innerHeight(newHeight);
+                    if(oldHeight > newHeight) {
+                        if(opts.animate) {
+                            box.stop().animate({height: newHeight}, {duration: opts.speed, complete: notifyShrunk});
+                        } else {
+                            box.innerHeight(newHeight);
+                            notifyShrunk();
+                        }
+                    }
+                    
                 } else { //just set to the minHeight
                     box.innerHeight(minHeight);
                 }
             } 
         }
+
+        // Trigger event to indicate a textarea has grown.
+        function notifyGrown() {
+            opts.context.trigger('autogrow:grow');
+        }
+
+        // Trigger event to indicate a textarea has shrunk.
+        function notifyShrunk() {
+            opts.context.trigger('autogrow:shrink');
+        }
+
         return that;
     }
 })(jQuery);
