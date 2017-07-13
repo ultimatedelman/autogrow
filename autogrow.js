@@ -43,10 +43,8 @@
             if (opts.onInitialize && elem.length) {
                 resize.call(elem[0]);
             }
+            elem.on('keyup paste', selector, resize);
         });
-        opts.context
-            .on('keyup paste', selector, resize)
-        ;
     
         function resize (e){
             var box = $(this)
