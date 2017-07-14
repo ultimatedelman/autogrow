@@ -43,7 +43,7 @@
             if (opts.onInitialize && elem.length) {
                 resize.call(elem[0]);
             }
-            elem.on('keyup paste', selector, resize);
+            elem.on('keyup paste', null, resize);
         });
     
         function resize (e){
