@@ -1,6 +1,7 @@
 ;(function($){    
     //pass in just the context as a $(obj) or a settings JS object
     $.fn.autogrow = function(opts) {
+    	var textAreaElement = $(this);
         var that = $(this).css({overflow: 'hidden', resize: 'none'}) //prevent scrollies
             , selector = that.selector
             , defaults = {
@@ -44,11 +45,15 @@
                 resize.call(elem[0]);
             }
         });
-        opts.context
-            .on('keyup paste', selector, resize)
-        ;
-    
+
+        opts.context.on('keyup paste', selector, resize);
+
+        textAreaElement.on('cut',function(){
+        	shrink();
+        })
+
         function resize (e){
+
             var box = $(this)
                 , oldHeight = box.innerHeight()
                 , newHeight = this.scrollHeight
@@ -64,46 +69,67 @@
                     notifyGrown();
                 }
                 
-            } else if (!e || e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88)) { //user is deleting, backspacing, or cutting
-                if (oldHeight > minHeight) { //shrink!
-                    //this cloning part is not particularly necessary. however, it helps with animation
-                    //since the only way to cleanly calculate where to shrink the box to is to incrementally
-                    //reduce the height of the box until the $.innerHeight() and the scrollHeight differ.
-                    //doing this on an exact clone to figure out the height first and then applying it to the
-                    //actual box makes it look cleaner to the user
-                    clone = box.clone()
-                        //add clone class for extra css rules
-                        .addClass(opts.cloneClass)
-                        //make "invisible", remove height restriction potentially imposed by existing CSS
-                        .css({position: 'absolute', zIndex:-10, height: ''}) 
-                        //populate with content for consistent measuring
-                        .val(box.val()) 
-                    ;
-                    box.after(clone); //append as close to the box as possible for best CSS matching for clone
-                    do { //reduce height until they don't match
-                        newHeight = clone[0].scrollHeight - 1;
-                        clone.innerHeight(newHeight);
-                    } while (newHeight === clone[0].scrollHeight);
-                    newHeight++; //adding one back eliminates a wiggle on deletion 
-                    clone.remove();
-                    box.focus(); // Fix issue with Chrome losing focus from the textarea.
-                    
-                    //if user selects all and deletes or holds down delete til beginning
-                    //user could get here and shrink whole box
-                    newHeight < minHeight && (newHeight = minHeight);
-                    if(oldHeight > newHeight) {
-                        if(opts.animate) {
-                            box.stop().animate({height: newHeight}, {duration: opts.speed, complete: notifyShrunk});
-                        } else {
-                            box.innerHeight(newHeight);
-                            notifyShrunk();
-                        }
-                    }
-                    
-                } else { //just set to the minHeight
-                    box.innerHeight(minHeight);
-                }
-            } 
+            } else if (!e || e.which == 8 || e.which == 46 || (e.ctrlKey && e.which == 88) )  { //user is deleting, backspacing, or cutting
+               // Shrink the textarea.
+               shrink();
+            }
+        }
+
+        // Shrink the textarea.
+        function shrink() {
+
+        	var box = textAreaElement
+                , oldHeight = box.innerHeight()
+                , newHeight = this.scrollHeight
+                , minHeight = box.data('autogrow-start-height') || 0
+                , clone
+            ;
+        	
+        	// It takes few ms for textarea value to be updated in the DOM!?
+        	setTimeout(function(){
+        		if ( 0 === box.val().length ) {
+        			box.innerHeight(minHeight);
+        		}
+        	}, 50)
+        	
+        	if (oldHeight > minHeight) { //shrink!
+                //this cloning part is not particularly necessary. however, it helps with animation
+                //since the only way to cleanly calculate where to shrink the box to is to incrementally
+                //reduce the height of the box until the $.innerHeight() and the scrollHeight differ.
+                //doing this on an exact clone to figure out the height first and then applying it to the
+                //actual box makes it look cleaner to the user
+                clone = box.clone()
+                    //add clone class for extra css rules
+                    .addClass(opts.cloneClass)
+                    //make "invisible", remove height restriction potentially imposed by existing CSS
+                    .css({position: 'absolute', zIndex:-10, height: ''}) 
+                    //populate with content for consistent measuring
+                    .val(box.val());
+
+	                box.after(clone); //append as close to the box as possible for best CSS matching for clone
+	                do { //reduce height until they don't match
+	                    newHeight = clone[0].scrollHeight - 1;
+	                    clone.innerHeight(newHeight);
+	                } while (newHeight === clone[0].scrollHeight);
+	                newHeight++; //adding one back eliminates a wiggle on deletion 
+	                clone.remove();
+	                box.focus(); // Fix issue with Chrome losing focus from the textarea.
+	                
+	                //if user selects all and deletes or holds down delete til beginning
+	                //user could get here and shrink whole box
+	                newHeight < minHeight && (newHeight = minHeight);
+	                if(oldHeight > newHeight) {
+	                    if(opts.animate) {
+	                        box.stop().animate({height: newHeight}, {duration: opts.speed, complete: notifyShrunk});
+	                    } else {
+	                        box.innerHeight(newHeight);
+	                        notifyShrunk();
+	                    }
+	                }
+	                
+	            } else { //just set to the minHeight
+	                box.innerHeight(minHeight);
+	            }
         }
 
         // Trigger event to indicate a textarea has grown.
