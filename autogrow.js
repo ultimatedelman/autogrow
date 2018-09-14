@@ -100,8 +100,13 @@
                         }
                     }
                     
-                } else { //just set to the minHeight
-                    box.innerHeight(minHeight);
+                } else {
+                    // On initialize set textarea height dynamically as per content length
+                    if (opts.onInitialize && (box.val().length > 0)) {
+                        box.innerHeight(Math.ceil(box.val().length));
+                    } else { //just set to the minHeight
+                        box.innerHeight(minHeight);
+                    }
                 }
             } 
         }
