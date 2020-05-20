@@ -1,7 +1,7 @@
 ;(function($){    
     //pass in just the context as a $(obj) or a settings JS object
     $.fn.autogrow = function(opts) {
-        var that = $(this).css({overflow: 'hidden', resize: 'none'}) //prevent scrollies
+        var that = $(this).css({overflow: 'auto', resize: 'none'}) //prevent scrollies
             , selector = that.selector
             , defaults = {
                 context: $(document) //what to wire events to
@@ -103,7 +103,9 @@
                 } else { //just set to the minHeight
                     box.innerHeight(minHeight);
                 }
-            } 
+            }
+
+            box.scrollTop(newHeight);
         }
 
         // Trigger event to indicate a textarea has grown.
